@@ -38,6 +38,37 @@ def test_simple_run(mserv, song):
     # No status to check
 
 
+def test_full_cycle(mserv):
+    # `mserv` is an instance of the `Music` class
+
+    # Performance at 2010 Vancouver Winter Olympics
+    song = ('k. d. lang', 'Hallelujah')
+    # Soundtrack of first Shrek film (2001)
+    orig_artist = 'Rufus Wainwright'
+    # Original recording from album "Various Positions" (1984)
+    orig_orig_artist = 'Leonard Cohen'
+
+    # Create a music record and save its id in the variable `m_id`
+    trc, m_id = mserv.create(song[0], song[1], orig_artist)
+    assert trc == 200
+
+    trc = mserv.write_orig_artist(m_id, orig_artist)
+    assert trc == 200
+    trc, oa = mserv.read_orig_artist(m_id)
+    assert trc == 200 and oa == orig_artist
+
+    trc = mserv.write_orig_artist(m_id, orig_orig_artist)
+    assert trc == 200
+    trc, ooa = mserv.read_orig_artist(m_id)
+    assert trc == 200 and ooa==orig_orig_artist
+
+    trc, a, title, oa = mserv.read(m_id)
+    assert trc == 200 and a == song[0] and title == song[1] and oa == orig_artist
+
+    # Cleanup called after the test completes
+    mserv.delete(m_id)
+
+
 @pytest.fixture
 def song_oa(request):
     # Recorded 1967
