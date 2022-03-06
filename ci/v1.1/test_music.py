@@ -65,6 +65,7 @@ def test_full_cycle(mserv):
     trc, a, title, oa = mserv.read(m_id)
     assert trc == 200 and a == song[0] and title == song[1] and oa == orig_artist
 
+
     # Cleanup called after the test completes
     mserv.delete(m_id)
 
